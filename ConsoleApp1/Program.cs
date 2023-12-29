@@ -53,9 +53,7 @@ namespace HelloWorld
             foreach (var line in input)
             {
                 _solution += Convert.ToInt32(line);
-                Console.WriteLine(line != "File not found." ? line : "Error.");
             }
-
             return _solution;
 
         }
@@ -68,9 +66,10 @@ namespace HelloWorld
             file_name = file_name is not null ? file_name : throw new Exception("File name not provided.");
             string[] input = DataLoader.Load(file_name);
             var prep_input = Enumerate(input);
-            var calibration_vals = from line in prep_input select Program.Calibrate(line.value);
-            int solution = Program.Sum_calibration_vals(calibration_vals);
-            Console.WriteLine("The solution is: ", solution);
+            IEnumerable<string> calibration_vals = from line in prep_input select Program.Calibrate(line.value);
+            Program.Sum_calibration_vals(calibration_vals);
+            int solution = Program._solution;
+            Console.WriteLine("The solution is: " + Convert.ToString(solution));
         }
     }
 }
