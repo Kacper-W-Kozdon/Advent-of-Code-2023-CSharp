@@ -28,10 +28,38 @@ namespace AdventOfCode
 
 namespace HelloWorld
 {
+
+    class Calibration_Values<T, U, V>
+    {   
+        public T val { get => val; set { val = value;  } }
+        public U Id { get => Id; set { Id = value; } }
+        public V calibration_val { get => calibration_val; set { calibration_val = value; } }
+    }
     class Program
     {
         public static IEnumerable<(int index, T value)> Enumerate<T>(IEnumerable<T> line)
             => line.Select((i, val) => (val, i));
+
+        static string Calibrate(string line)
+        {
+            string ret = string.Concat(line.Where(char.IsDigit).ToArray()[0], line.Where(char.IsDigit).ToArray().Last());
+            return ret;
+        }
+
+        static int _solution;
+
+        static int Sum_calibration_vals(IEnumerable<string> input)
+        {
+            foreach (var line in input)
+            {
+                _solution += Convert.ToInt32(line);
+                Console.WriteLine(line != "File not found." ? line : "Error.");
+            }
+
+            return _solution;
+
+        }
+       
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
@@ -40,10 +68,9 @@ namespace HelloWorld
             file_name = file_name is not null ? file_name : throw new Exception("File name not provided.");
             string[] input = DataLoader.Load(file_name);
             var prep_input = Enumerate(input);
-            foreach (var line in prep_input)
-            {
-                Console.WriteLine(line.value != "File not found." ? line : "");
-            }            
+            var calibration_vals = from line in prep_input select Program.Calibrate(line.value);
+            int solution = Program.Sum_calibration_vals(calibration_vals);
+            Console.WriteLine("The solution is: ", solution);
         }
     }
 }
