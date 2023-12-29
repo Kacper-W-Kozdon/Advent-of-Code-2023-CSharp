@@ -42,7 +42,13 @@ namespace HelloWorld
 
         static string Calibrate(string line)
         {
-            string ret = string.Concat(line.Where(char.IsDigit).ToArray()[0], line.Where(char.IsDigit).ToArray().Last());
+            string ret = string.IsNullOrEmpty(string.Concat(line.Where(char.IsDigit).ToArray()) as string) ? "0" : string.Concat(line.Where(char.IsDigit).ToArray()[0], line.Where(char.IsDigit).ToArray().Last());
+            return ret;
+        }
+
+        static string Precalibrate(string line)
+        {
+            string ret = line.ToLower().Replace("one", "o1e").Replace("two", "t2o").Replace("three", "t3e").Replace("four", "f4r").Replace("five", "f5e").Replace("six", "s6x").Replace("seven", "s7n").Replace("eight", "e8t").Replace("nine", "n9e");
             return ret;
         }
 
@@ -50,6 +56,7 @@ namespace HelloWorld
 
         static int Sum_calibration_vals(IEnumerable<string> input)
         {
+            Program._solution = 0;
             foreach (var line in input)
             {
                 _solution += Convert.ToInt32(line);
@@ -70,6 +77,10 @@ namespace HelloWorld
             Program.Sum_calibration_vals(calibration_vals);
             int solution = Program._solution;
             Console.WriteLine("The solution is: " + Convert.ToString(solution));
+            calibration_vals = from line in prep_input select Program.Calibrate(Program.Precalibrate(line.value));
+            Program.Sum_calibration_vals(calibration_vals);
+            int solution2 = Program._solution;
+            Console.WriteLine("The solution2 is: " + Convert.ToString(solution2));
         }
     }
 }
